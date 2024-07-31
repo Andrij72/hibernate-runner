@@ -87,14 +87,12 @@ class HiberRunTest {
                     .build();
             session.save(manager);
             session.flush();
-
             session.clear();
-
             var programmer1 = session.get(Programmer.class, 1L);
             var manager1 = session.get(User.class, 2L);
+            System.out.printf("Calling programmer1: %s and manager: %s",
+                    programmer1.toString(), manager.toString());
             System.out.println();
-
-
             session.getTransaction().commit();
         }
     }

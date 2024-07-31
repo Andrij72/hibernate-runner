@@ -1,3 +1,3 @@
-# hibernate-starter
+# hibernate-runner
 
-sql script is located in the root project dir: script.sql 
+sql script is located in resources db: db1.sql 
