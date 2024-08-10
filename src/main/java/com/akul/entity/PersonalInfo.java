@@ -25,6 +25,6 @@ public class PersonalInfo implements Serializable {
 
     private String lastname;
 
-   // @Convert(converter = BirthdayConverter.class)
-    private Birthday birthDate;
+    @Convert(converter = BirthdayConverter.class)
+    private Birthday  birthdate;
 }

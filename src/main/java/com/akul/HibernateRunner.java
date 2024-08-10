@@ -1,22 +1,12 @@
 package com.akul;
 
 
-import com.akul.entity.Birthday;
-import com.akul.entity.Company;
-import com.akul.entity.LocaleInfo;
-import com.akul.entity.PersonalInfo;
-import com.akul.entity.Profile;
-import com.akul.entity.Programmer;
-import com.akul.entity.Role;
-import com.akul.entity.User;
 import com.akul.util.HibernateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 @Slf4j
 public class HibernateRunner {
@@ -26,7 +16,7 @@ public class HibernateRunner {
         try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory();
              Session session = sessionFactory.openSession()) {
             try (session) {
-                Company company = Company.builder()
+               /* Company company = Company.builder()
                         .name("Google")
                         .build();
 
@@ -64,7 +54,7 @@ public class HibernateRunner {
                 session.save(company);
                 session.flush();
                 log.info("Company is in persistent state: {}, session {}", company, session);
-                session.clear();
+                session.clear();*/
                 session.getTransaction().commit();
 
             }
@@ -74,5 +64,4 @@ public class HibernateRunner {
             throw ex;
         }
     }
-
 }

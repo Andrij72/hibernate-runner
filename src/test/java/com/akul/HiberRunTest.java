@@ -2,20 +2,16 @@ package com.akul;
 
 import com.akul.entity.Chat;
 import com.akul.entity.Company;
-import com.akul.entity.Language;
-import com.akul.entity.LocaleInfo;
-import com.akul.entity.Manager;
-import com.akul.entity.PersonalInfo;
 import com.akul.entity.Profile;
-import com.akul.entity.Programmer;
 import com.akul.entity.User;
 import com.akul.entity.UsersChat;
 import com.akul.util.HibernateTestUtil;
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.junit.Ignore;
+import org.hibernate.jpa.QueryHints;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +21,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,12 +38,18 @@ class HiberRunTest {
         try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
              var session = sessionFactory.openSession()) {
             session.beginTransaction();
-            checkH2();
+            checkStrategySingleTable();
             String name = "Sveta";
             session.flush();
             var users = session.createQuery(
-                            "select u from User u  where u.personalInfo.firstname=?1", User.class)
-                    .setParameter(1, name)
+                            "select u from User u " +
+                                    "join u.company c " +
+                                    "where u.personalInfo.firstname = :firstName and c.name = :companyName " +
+                                    "order by u.personalInfo.lastname asc", User.class)
+                    .setParameter("firstName", name)
+                    .setParameter("companyName", "Google")
+                    .setHint(QueryHints.HINT_FETCH_SIZE, "50")
+                    .setFlushMode(FlushMode.COMMIT)
                     .list();
 
             System.out.println(users);
@@ -59,7 +60,7 @@ class HiberRunTest {
     }
 
     @Test
-    public void checkH2() {
+    public void checkStrategySingleTable() {
         try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
              var session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -69,7 +70,7 @@ class HiberRunTest {
                     .build();
             session.save(google);
 
-            Programmer programmer = Programmer.builder()
+            /*Programmer programmer = Programmer.builder()
                     .username("ivan@gmail.com")
                     .language(Language.Java)
                     .company(google)
@@ -91,7 +92,7 @@ class HiberRunTest {
             var programmer1 = session.get(Programmer.class, 1L);
             var manager1 = session.get(User.class, 2L);
             System.out.printf("Calling programmer1: %s and manager: %s",
-                    programmer1.toString(), manager.toString());
+                    programmer1, manager);*/
             System.out.println();
             session.getTransaction().commit();
         }
@@ -106,10 +107,10 @@ class HiberRunTest {
         var company = Company.builder()
                 .name("Amazon")
                 .build();
-        var user1 = Programmer.builder()
+        var user1 = User.builder()
                 .username("vika@gmail.com")
                 .build();
-        var user2 = Manager.builder()
+        var user2 = User.builder()
                 .username("vlad@gmail.com")
                 .build();
         company.addUser(user1);
@@ -267,7 +268,7 @@ class HiberRunTest {
     @Disabled
     @Test
     void checkReflectionApi() throws SQLException, IllegalAccessException {
-        User user = Manager.builder()
+        User user = User.builder()
                 .build();
 
         String sql = """
@@ -321,7 +322,7 @@ class HiberRunTest {
                     .street("Voli 54")
                     .build();
 
-            var user = Programmer.builder()
+            var user = User.builder()
                     .username("vasilij@gmail.com")
                     .info("""
                             {

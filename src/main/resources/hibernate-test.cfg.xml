@@ -22,7 +22,6 @@
         <mapping class="com.akul.entity.Company"/>
         <mapping class="com.akul.entity.Chat"/>
         <mapping class="com.akul.entity.UsersChat"/>
-        <mapping class="com.akul.entity.Programmer"/>
-        <mapping class="com.akul.entity.Manager"/>
+        <mapping class="com.akul.entity.Payment"/>
     </session-factory>
 </hibernate-configuration>

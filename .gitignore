@@ -1,0 +1,10 @@
+.idea
+
+.gradle
+**/build/
+/gradlew
+/gradlew.bat
+/settings.gradle
+/hibernate-starter.log
+/gradle
+/libs

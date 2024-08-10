@@ -1,7 +1,6 @@
 package com.akul.util;
 
 import com.akul.converter.BirthdayConverter;
-import com.akul.entity.User;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.util.CamelCaseToSnakeCaseNamingStrategy;
 import lombok.experimental.UtilityClass;
