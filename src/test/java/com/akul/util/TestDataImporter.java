@@ -1,6 +1,5 @@
 package com.akul.util;
 
-import com.akul.entity.Birthday;
 import com.akul.entity.Company;
 import com.akul.entity.Payment;
 import com.akul.entity.PersonalInfo;
@@ -73,7 +72,7 @@ public class TestDataImporter {
                 .personalInfo(PersonalInfo.builder()
                         .firstname(firstName)
                         .lastname(lastName)
-                        .birthdate(new Birthday(birthday))
+                        .birthdate(birthday)
                         .build())
                 .company(company)
                 .build();
